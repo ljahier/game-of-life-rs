@@ -4,7 +4,7 @@ const GRID_SIZE: usize = 40;
 
 pub struct _Grid {
     pub front_buff: Vec<bool>,
-    pub back_buff: Vec<bool>
+    pub back_buff: Vec<bool>,
 }
 
 impl _Grid {
@@ -27,9 +27,9 @@ impl _Grid {
         *y = value / GRID_SIZE;
     }
 
-    fn get_cell_value(&self, x: usize, y:usize) -> bool {
+    fn get_cell_value(&self, x: usize, y: usize) -> bool {
         if !_Grid::is_in_bounds(x, y) {
-            return false
+            return false;
         }
         self.front_buff[y * GRID_SIZE + x]
     }

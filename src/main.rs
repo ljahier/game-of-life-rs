@@ -6,13 +6,10 @@ use minifb::{Key, Window, WindowOptions, MouseMode, MouseButton};
 use std::time::Duration;
 use std::thread::sleep;
 
-
 const CELL_SIZE: usize = 16;
 const GRID_SIZE: usize = 40;
-
 const WIDTH: usize = CELL_SIZE * GRID_SIZE;
 const HEIGHT: usize = CELL_SIZE * GRID_SIZE;
-
 const CELL_WIDTH: usize = WIDTH / CELL_SIZE;
 const CELL_HEIGHT: usize = HEIGHT / CELL_SIZE;
 
@@ -20,24 +17,18 @@ fn main() {
     let mut buffer: Vec<u32> = vec![0; WIDTH * HEIGHT];
     let mut grid = grid::_Grid {
         front_buff: vec![false; CELL_WIDTH * CELL_HEIGHT],
-        back_buff: vec![false; CELL_WIDTH * CELL_HEIGHT]
+        back_buff: vec![false; CELL_WIDTH * CELL_HEIGHT],
     };
-
-    /*grid.front_buff[3 + GRID_SIZE + 2] = true;
-    grid.front_buff[3 + GRID_SIZE + 3] = true;
-    grid.front_buff[3 + GRID_SIZE + 4] = true;*/
-
-    grid.update();
-
     let mut window = Window::new(
         "Test - ESC to exit",
         WIDTH,
         HEIGHT,
         WindowOptions::default(),
     )
-    .unwrap_or_else(|e| {
-        panic!("{}", e);
-    });
+        .unwrap_or_else(|e| {
+            panic!("{}", e);
+        });
+    let mut count: u32 = 0;
 
     // Limit to max ~60 fps update rate
     window.limit_update_rate(Some(std::time::Duration::from_micros(16600)));
@@ -56,6 +47,8 @@ fn main() {
         if window.is_key_down(Key::Space) {
             sleep(Duration::new(0, 50000000));
             grid.update();
+            count += 1;
+            println!("Turn number {}", count);
         }
         for (index, cell) in buffer.iter_mut().enumerate() {
             let x = index % WIDTH;
