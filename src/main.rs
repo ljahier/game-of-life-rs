@@ -1,13 +1,13 @@
 extern crate minifb;
 
-use minifb::{Key, Window, WindowOptions};
+use minifb::{Key, Window, WindowOptions, MouseMode, MouseButton};
 use std::mem;
 use std::time::Duration;
 use std::thread::sleep;
 
 
-const CELL_SIZE: usize = 32;
-const GRID_SIZE: usize = 20;
+const CELL_SIZE: usize = 16;
+const GRID_SIZE: usize = 40;
 
 const WIDTH: usize = CELL_SIZE * GRID_SIZE;
 const HEIGHT: usize = CELL_SIZE * GRID_SIZE;
@@ -77,9 +77,9 @@ fn main() {
         back_buff: vec![false; CELL_WIDTH * CELL_HEIGHT]
     };
 
-    grid.front_buff[3 + GRID_SIZE + 2] = true;
+    /*grid.front_buff[3 + GRID_SIZE + 2] = true;
     grid.front_buff[3 + GRID_SIZE + 3] = true;
-    grid.front_buff[3 + GRID_SIZE + 4] = true;
+    grid.front_buff[3 + GRID_SIZE + 4] = true;*/
 
     grid.update();
 
@@ -97,8 +97,20 @@ fn main() {
     window.limit_update_rate(Some(std::time::Duration::from_micros(16600)));
 
     while window.is_open() && !window.is_key_down(Key::Escape) {
-        sleep(Duration::new(0, 50000000));
-        grid.update();
+        window.get_mouse_pos(MouseMode::Discard).map(|mouse| {
+            let cell_x = mouse.0 as usize / CELL_SIZE;
+            let cell_y = mouse.1 as usize / CELL_SIZE;
+
+            if window.get_mouse_down(MouseButton::Left) {
+                grid.front_buff[cell_y * CELL_WIDTH + cell_x] = true
+            } else if window.get_mouse_down(MouseButton::Right) {
+                grid.front_buff[cell_y * CELL_WIDTH + cell_x] = false
+            }
+        });
+        if window.is_key_down(Key::Space) {
+            sleep(Duration::new(0, 50000000));
+            grid.update();
+        }
         for (index, cell) in buffer.iter_mut().enumerate() {
             let x = index % WIDTH;
             let y = index / WIDTH;
