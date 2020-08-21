@@ -1,4 +1,4 @@
-mod Grid;
+mod grid;
 
 extern crate minifb;
 
@@ -18,7 +18,7 @@ const CELL_HEIGHT: usize = HEIGHT / CELL_SIZE;
 
 fn main() {
     let mut buffer: Vec<u32> = vec![0; WIDTH * HEIGHT];
-    let mut grid = Grid::Grid {
+    let mut grid = grid::_Grid {
         front_buff: vec![false; CELL_WIDTH * CELL_HEIGHT],
         back_buff: vec![false; CELL_WIDTH * CELL_HEIGHT]
     };

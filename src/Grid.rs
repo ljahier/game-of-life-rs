@@ -1,20 +1,13 @@
 use std::mem;
 
-const CELL_SIZE: usize = 16;
 const GRID_SIZE: usize = 40;
 
-const WIDTH: usize = CELL_SIZE * GRID_SIZE;
-const HEIGHT: usize = CELL_SIZE * GRID_SIZE;
-
-const CELL_WIDTH: usize = WIDTH / CELL_SIZE;
-const CELL_HEIGHT: usize = HEIGHT / CELL_SIZE;
-
-pub struct Grid {
+pub struct _Grid {
     pub front_buff: Vec<bool>,
     pub back_buff: Vec<bool>
 }
 
-impl Grid {
+impl _Grid {
     fn compute_neighbour(&self, x: usize, y: usize) -> u32 {
         let mut count: u32 = 0;
 
@@ -35,7 +28,7 @@ impl Grid {
     }
 
     fn get_cell_value(&self, x: usize, y:usize) -> bool {
-        if !Grid::is_in_bounds(x, y) {
+        if !_Grid::is_in_bounds(x, y) {
             return false
         }
         self.front_buff[y * GRID_SIZE + x]
@@ -53,7 +46,7 @@ impl Grid {
         for (index, _) in self.front_buff.iter().enumerate() {
             let mut x: usize = 0;
             let mut y: usize = 0;
-            Grid::get_coordinates(index, &mut x, &mut y);
+            _Grid::get_coordinates(index, &mut x, &mut y);
             self.back_buff[index] = match self.compute_neighbour(x, y) {
                 2 => self.front_buff[index],
                 3 => true,
